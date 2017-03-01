@@ -1,8 +1,9 @@
 
-const express    = require('express');
-const port       = process.env.PORT || 3000;
-const bodyParser = require('body-parser');
-const geocodio   = require('./geocodio');
+const express        = require('express');
+const port           = process.env.PORT || 3000;
+const allowedOrigins = process.env.ALLOWED_ORIGINS || '*';
+const bodyParser     = require('body-parser');
+const geocodio       = require('./geocodio');
 
 var app = express();
 
@@ -11,6 +12,23 @@ var app = express();
 
 // parse application/json
 app.use(bodyParser.json())
+
+// CORS middleware
+var allowCrossDomain = function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', allowedOrigins);
+  res.header('Access-Control-Allow-Methods', 'GET,OPTIONS');
+  // Allow any request headers since we are locking down the origin
+  res.header('Access-Control-Allow-Headers', req.header('Access-Control-Request-Headers'));
+
+  // OPTIONS always returns true
+  if ('OPTIONS' === req.method) {
+    res.send(200);
+  } else {
+    next();
+  }
+};
+
+app.use(allowCrossDomain);
 
 
 

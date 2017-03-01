@@ -56,7 +56,6 @@ var geocodio = function(address, callback) {
         console.log(apiResponse);
         callback(apiResponse.error);
       } else if (response.results) {
-        console.log(response);
         var result = response.results[0];
         var addressWithCd = {
           congressional_district: result.fields.congressional_district,
